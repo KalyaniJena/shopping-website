@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification & Theme Selection</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: grey;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            text-align: center;
+        }
+        .otp-box, .theme-box {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .otp-box.active, .theme-box.active {
+            display: block;
+        }
+        .otp-box {
+            width: 350px;
+        }
+        .loading {
+            font-size: 18px;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+            color: white;
+        }
+        .animation {
+            width: 50px;
+            height: 50px;
+            background: blue;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            animation: bounce 1s infinite alternate;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        .otp-message {
+            background: #007BFF;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .otp-input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .otp-btn {
+            background: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .otp-btn:hover {
+            background: #0056b3;
+        }
+        .theme-box {
+            width: 650px;
+        }
+        .theme-heading {
+            color: blue;
+            margin-bottom: 10px;
+        }
+        .theme-selection {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 10px;
+        }
+        .theme {
+            text-align: center;
+            border: 2px solid transparent;
+            border-radius: 5px;
+            padding: 10px;
+            width: 30%;
+        }
+        .theme img {
+            width: 100%;
+            height: 150px;
+            border-radius: 5px;
+            object-fit: cover;
+        }
+        .selected button {
+            background: #28a745;
+        }
+        .select-theme {
+            margin-top: 10px;
+            padding: 5px 10px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .next-btn {
+            display: block;
+            margin: 20px 10px 0 auto;
+            background: #007BFF;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="otp-box active" id="otpBox">
+            <h4><strong>Create <span class="text-primary">Store</span></strong></h4>
+            <p class="otp-message">We have sent an OTP to your mobile number. Please enter the same to proceed.</p>
+            <input type="text" id="otp" class="otp-input" placeholder="Enter OTP" maxlength="6">
+            <div>
+                <small>Resend OTP in <span id="timer">02:28</span></small>
+            </div>
+            <button class="otp-btn" onclick="verifyOTP()">LET'S GO</button>
+        </div>
+        <div class="loading" id="loading">
+            <div class="animation"></div>
+            Creating Store...
+        </div>
+        <div class="theme-box" id="themeBox">
+            <h2 class="theme-heading">Let's Customize Your Shopnix Store</h2>
+            <h2 style="color: #007BFF;">Apply a theme</h2>
+            <div class="theme-selection">
+                <div class="theme" onclick="selectTheme(this)">
+                    <img src="https://tse4.mm.bing.net/th?id=OIP.t_rOZQ7xcaq2KkMTv9K6nwHaHa&pid=Api&P=0&h=180" alt="bag-theme">
+                    <h3>Bags Theme</h3>
+                    <button class="select-theme">Choose</button>
+                </div>
+                <div class="theme" onclick="selectTheme(this)">
+                    <img src="https://tse4.mm.bing.net/th?id=OIP.7JQXDkmy8VrwfbQEpcMYJgHaJP&pid=Api&P=0&h=180" alt="flex-theme">
+                    <h3>Flex Theme</h3>
+                    <button class="select-theme">Choose</button>
+                </div>
+                <div class="theme" onclick="selectTheme(this)">
+                    <img src="https://tse1.mm.bing.net/th?id=OIP.TEkRB9E7jm6nseYjZgb1vQHaJQ&pid=Api&P=0&h=180" alt="chic-theme">
+                    <h3>Chic Theme</h3>
+                    <button class="select-theme">Choose</button>
+                </div>
+            </div>
+            <button class="next-btn">Next</button>
+        </div>
+    </div>
+    <script>
+        function verifyOTP() {
+            document.getElementById('otpBox').classList.remove('active');
+            document.getElementById('loading').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('themeBox').classList.add('active');
+            }, 3000);
+        }
+        function selectTheme(element) {
+            document.querySelectorAll('.theme').forEach(theme => {
+                theme.classList.remove('selected');
+                theme.querySelector('.select-theme').innerText = 'Choose';
+            });
+            element.classList.add('selected');
+            element.querySelector('.select-theme').innerText = '✅';
+        }
+    </script>
+</body>
+</html>
